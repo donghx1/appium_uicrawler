@@ -23,26 +23,46 @@ class deriver_encapsulation(object):
         self.driver = self.init()
 
     def init(self):
-        dis_app = make_dis(self.Testplatform, self.platform_version, self.dev, self.apkname, self.activity)
-        LOG.info(dis_app)
-        options = AppiumOptions()
-        for key, value in dis_app.items():
-            options.set_capability(key, value)
-        
-        
-        desired_caps = {
-            "platformName": "Android",
-            "automationName": "UiAutomator2",
-            "deviceName": "AndroidDevice",
-            "app": "/path/to/your/app.apk",
-            "udid": "0A311FDD4006QW"  # 确保设备 ID 正确
-        }
+        try:
+            # 基础必需的 capabilities
+            capabilities = {
+                "platformName": self.Testplatform,
+                "platformVersion": self.platform_version,
+                "deviceName": self.dev,
+                "appPackage": self.apkname,
+                "appActivity": self.activity,
+                # 常用的辅助配置
+                "automationName": "UiAutomator2",  # Android 推荐使用 UiAutomator2
+                "noReset": True,  # 不重置应用状态
+                "newCommandTimeout": 6000,  # 命令超时时间
+                "unicodeKeyboard": True,  # 使用 Unicode 输入法
+                "resetKeyboard": True,  # 重置输入法
+                "autoGrantPermissions": True,  # 自动授予权限
+                # 可选的性能优化配置
+                "skipServerInstallation": False,
+                "skipDeviceInitialization": False,
+                "androidDeviceReadyTimeout": 30,
+                "adbExecTimeout": 60000
+            }
 
-        driver = webdriver.Remote('http://localhost:4723', desired_capabilities=desired_caps)
-        # deriver = webdriver.Remote('http://localhost:{}/wd/hub'.format(str(self.port)), options=options)
-        deriver = webdriver.Remote('http://localhost:{}'.format(self.port), options=options)
-        time.sleep(10)
-        return deriver
+            LOG.info(f"Appium Capabilities: {capabilities}")
+            
+            options = AppiumOptions()
+            for key, value in capabilities.items():
+                options.set_capability(key, value)
+            
+            # 创建 driver 连接
+            driver = webdriver.Remote(
+                command_executor=f'http://localhost:{str(self.port)}/wd/hub',
+                options=options
+            )
+            
+            time.sleep(5)  # 等待初始化完成
+            return driver
+            
+        except Exception as e:
+            LOG.error(f"初始化 Appium driver 失败: {str(e)}")
+            raise
 
     def find_ele(self, method, path, timeout=1):
         try:

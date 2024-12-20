@@ -3,6 +3,8 @@ python appium 实现UI遍历
 
 
 
+appium --base-path /wd/hub --port 4723 --allow-insecure adb_connect
+
 
 # 错误： import cv2
 
@@ -15,6 +17,10 @@ pip install --upgrade opencv-python -i https://pypi.tuna.tsinghua.edu.cn/simple
 
 from androguard.misc import AnalyzeAPK
  apk, _, _ = AnalyzeAPK(filepath)
+
+------------------------------------------------------------------------------------------------
+
+# 安装 ADB
 
 
 # 错误 failed to open device: Access denied (insufficient permissions) 表示 ADB 无法访问你的 USB 设备，通常是因为权限问题。以下是解决方法：
@@ -107,3 +113,112 @@ adb devices
 总结
 
 通常，设置正确的 udev 规则后即可解决 ADB 设备权限问题。如果问题仍然存在，可以尝试临时使用 root 权限运行 ADB 服务。如果有进一步错误，请分享详细日志。
+
+------------------------------------------------------------------------------------------------
+
+
+# 安装 Android SDK
+
+
+要在 CentOS Stream 9 上安装 Android SDK，你可以按照以下步骤进行：
+
+1. 准备系统环境
+
+首先确保系统已经安装必要的软件依赖和工具。
+
+更新系统
+
+sudo dnf update -y
+
+安装必备工具
+
+sudo dnf install -y wget unzip java-11-openjdk-devel
+
+	Android SDK 需要 Java 环境，java-11-openjdk-devel 提供了 JDK 11。
+
+2. 下载 Android SDK 命令行工具
+
+Android SDK 命令行工具（Command Line Tools）是 Android SDK 的一部分。你可以通过官方网站或以下命令直接下载。
+
+创建 SDK 目录
+
+mkdir -p ~/workspace/android-sdk/cmdline-tools
+cd ~/workspace/android-sdk/cmdline-tools
+
+下载命令行工具（适用于 Linux）
+
+wget https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip
+wget https://dl.google.com/android/repository/commandlinetools-linux-11076708_latest.zip
+
+	注意：commandlinetools-linux 的版本号可能会更新，可以从 Android SDK 下载页面 获取最新链接。
+
+解压压缩包
+
+unzip commandlinetools-linux-*.zip
+mv cmdline-tools tools
+
+3. 配置环境变量
+
+为 Android SDK 配置环境变量，以便可以从命令行访问 sdkmanager 和其他工具。
+
+编辑用户的 Shell 配置文件（如 .bashrc 或 .zshrc）
+
+nano ~/.bashrc
+
+添加以下内容
+
+export ANDROID_HOME=~/workspace/android-sdk
+export ANDROID_SDK_ROOT=~/workspace/android-sdk
+export PATH=$ANDROID_HOME/cmdline-tools/tools/bin:$ANDROID_HOME/platform-tools:$PATH
+
+使配置立即生效
+
+source ~/.bashrc
+
+4. 安装 SDK 平台工具
+
+使用 sdkmanager 安装必要的 SDK 组件。
+
+验证 sdkmanager
+
+sdkmanager --version
+
+接受许可协议
+
+首次运行时，执行以下命令以接受协议：
+
+sdkmanager --licenses
+
+根据提示输入 y 来接受协议。
+
+安装平台工具和构建工具
+
+sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+
+	•	platform-tools：包含 adb 等常用工具。
+	•	platforms;android-XX：指定 Android API 版本。
+	•	build-tools;XX.0.0：Android 构建工具。
+
+5. 验证安装
+
+检查 adb 命令是否可用
+
+adb version
+
+检查 SDK 路径和组件
+
+sdkmanager --list
+
+6. 使用 Android SDK
+
+现在 Android SDK 已安装完成，你可以使用 adb、sdkmanager 等工具进行 Android 开发或测试。
+
+例如：
+	•	通过 adb 管理连接的 Android 设备。
+	•	通过 sdkmanager 安装更多组件或升级 SDK。
+
+完整路径示例
+	•	SDK 路径：~/android-sdk
+	•	平台工具路径：~/android-sdk/platform-tools
+
+以上步骤适用于 CentOS Stream 9，确保网络畅通，并根据需求安装特定的 Android 组件。
