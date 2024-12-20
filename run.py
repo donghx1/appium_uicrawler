@@ -13,6 +13,7 @@ from common.apktools import get_apkname,get_apk_lanchactivity
 basepth=os.getcwd()
 
 def uicrawler():
+    
     LOG.name = "基于Appium UI遍历测试"
     os.path.join(os.path.join(basepth, 'testlog'), 'UI-' + call_num + '.log')
     path=os.path.join(os.path.join(os.getcwd(),"installapk"),'autohome.apk')
@@ -23,7 +24,7 @@ def uicrawler():
     if os.path.exists(path) is False:
         os.mkdir(path)
     runlog = multiprocessing.Pool()
-    runlog.apply_async(run_adb_log, ("RF8MC0GHRHR", path))
+    runlog.apply_async(run_adb_log, ("0A311FDD4006QW", path))
     run('0A311FDD4006QW', testapk, '4723', 'Android', call_num,testapklanchactivity)
     runlog.close()
     runlog.terminate()

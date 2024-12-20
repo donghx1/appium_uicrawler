@@ -108,8 +108,11 @@ venv.bak/
 .try
 .vscode/
 
-# 日志文件
-testlog/
+# 测试报告
+testreport
 
 # 安装包
-installapk/
+installapk/*
+
+# 日志文件
+testlog/

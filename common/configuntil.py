@@ -19,7 +19,7 @@ class Parse(object):
         file = open(self.filepath, 'r', encoding="utf-8")
         file_data = file.read()
         file.close()
-        self.reslut = yaml.load(file_data)
+        self.reslut = yaml.load(file_data, Loader=yaml.SafeLoader)
         return self.reslut
 
     def getlogin(self):
