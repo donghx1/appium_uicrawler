@@ -3,6 +3,7 @@ import os.path
 import time
 from datetime import timedelta, datetime
 from appium import webdriver
+from appium.options.common import AppiumOptions
 from common.disapp import make_dis
 from common.log import LOG
 from selenium.webdriver.support.wait import WebDriverWait
@@ -24,7 +25,22 @@ class deriver_encapsulation(object):
     def init(self):
         dis_app = make_dis(self.Testplatform, self.platform_version, self.dev, self.apkname, self.activity)
         LOG.info(dis_app)
-        deriver = webdriver.Remote('http://localhost:{}/wd/hub'.format(str(self.port)), dis_app)
+        options = AppiumOptions()
+        for key, value in dis_app.items():
+            options.set_capability(key, value)
+        
+        
+        desired_caps = {
+            "platformName": "Android",
+            "automationName": "UiAutomator2",
+            "deviceName": "AndroidDevice",
+            "app": "/path/to/your/app.apk",
+            "udid": "0A311FDD4006QW"  # 确保设备 ID 正确
+        }
+
+        driver = webdriver.Remote('http://localhost:4723', desired_capabilities=desired_caps)
+        # deriver = webdriver.Remote('http://localhost:{}/wd/hub'.format(str(self.port)), options=options)
+        deriver = webdriver.Remote('http://localhost:{}'.format(self.port), options=options)
         time.sleep(10)
         return deriver
 

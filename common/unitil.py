@@ -10,7 +10,7 @@ import platform, os
 import random
 import re
 
-from androguard.core.bytecodes.apk import APK
+from androguard.misc import AnalyzeAPK
 
 nativeKey = "Native Heap"
 dalKey = "Dalvik Heap"
@@ -146,7 +146,7 @@ def getversion(dev):
 
 def getactivity(filepath, apkname):
     all_list_activity = []
-    apk = APK(filepath)
+    apk, _, _ = AnalyzeAPK(filepath)
     elements = apk.find_tags_from_xml('AndroidManifest.xml', 'activity')
     for item in elements:
         for key, value in item.attrib.items():

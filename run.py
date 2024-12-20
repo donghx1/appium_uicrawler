@@ -24,7 +24,7 @@ def uicrawler():
         os.mkdir(path)
     runlog = multiprocessing.Pool()
     runlog.apply_async(run_adb_log, ("RF8MC0GHRHR", path))
-    run('RPG0218B26005034', testapk, '4723', 'Android', call_num,testapklanchactivity)
+    run('0A311FDD4006QW', testapk, '4723', 'Android', call_num,testapklanchactivity)
     runlog.close()
     runlog.terminate()
 

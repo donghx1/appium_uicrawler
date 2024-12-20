@@ -8,14 +8,15 @@
 """
 
 
-from androguard.core.bytecodes.apk import APK
-
+from androguard.misc import AnalyzeAPK
 
 def get_apkname(apk):
-    a = APK(apk, False, "r")
+    
+    a, _, _ = AnalyzeAPK(apk, False, "r")
     return a.get_package()
 
 
 def get_apk_lanchactivity(apk):
-    a = APK(apk, False, "r")
+    
+    a, _, _ = AnalyzeAPK(apk, False, "r")
     return a.get_main_activity()

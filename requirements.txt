@@ -1,3 +1,4 @@
+# pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
 PyYAML==6.0.1
 selenium==4.18.1
 lxml==5.1.0
@@ -7,3 +8,4 @@ Logbook==1.7.0.post0
 Appium-Python-Client==3.2.1
 loguru==0.7.2
 opencv-contrib-python==4.9.0.80 
+androguard>=3.6.1
